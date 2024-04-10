@@ -6,7 +6,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
         <style>
-            *{
+            * {
                 margin: 0;
                 padding: 0;
             }
@@ -14,63 +14,67 @@
                 font-family: 'Calibri', sans-serif;
                 width: 100vw;
                 height: 100vh;
+                background-image: url('img/bg/bg-invoice.jpg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                font-size: 12px;
+            }
+            .container {
+                margin-top: 30px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
             }
             .custom-table, .custom-table1 {
-        width: 80%; /* Atur lebar tabel sesuai keinginan */
-        margin-left: auto;
-        margin-right: auto;
-    }
-
-    /* Mengurangi padding dalam sel tabel untuk mengurangi ukuran tabel */
-    .table td, .table th {
-        padding: .3rem; /* Sesuaikan padding sesuai kebutuhan */
-    }
-
-    /* Memastikan container tidak memiliki skala transformasi yang mempengaruhi anak-anaknya */
-    .container {
-        margin-top: 30px; /* Atur margin atas */
-        /* Jika Anda ingin container menyesuaikan dengan ukuran tabel */
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-            .invoice-info{
-                margin:auto;
-            }
-            .invoice-info-header{
-                background-color: #01013D;
-                display: block;
-                color: black;
-                margin:auto;
-            }
-            .thead-primary{
-                background-color: #01013D;
-                color: white;
-            }
-            h5.fw-bold{
-                font-size: 12px;
-                color: black;
-                margin-top: 5px;
-            }
-            .fw-bold{
-                font-weight: bold;
-            }
-            .ul-invoice {
-                text-decoration: none;
-                list-style-type: none;
-            }
-            .no-invoice{
-                font-size: 12px;
-                padding-top: 113px;
-                padding-left: 20px;
-                color: black;
-            }
-            .custom-table, .custom-table1{
+                width: 80%;
                 margin: auto;
             }
-            table{
-                font-size: 12px;
+            .table {
+                border-collapse: collapse;
+            }
+            .table td, .table th {
+                padding: .3rem;
+                border: 1px solid #dee2e6;
+            }
+            .table th {
+                border-top: none;
+            }
+            .thead-primary th {
+                background-color: #01013D;
+                color: white;
+                border-top: none;
+            }
+            .table thead th {
+                border-bottom: 2px solid #dee2e6;
+            }
+            .table tbody + tbody {
+                border-top: 2px solid #dee2e6;
+            }
+            .table tbody tr:first-child td {
+                border-top: none;
+            }
+            .no-invoice {
+                font-size: 14px;
+                padding-top: 125px;
+                padding-left: 73px;
+                color: black;
+            }
+            .ul-invoice{
+                list-style-type: none;
+            }
+            .ul-invoice li{
+                text-decoration: none
+            }
+            .customer-addres{
+                max-width: 280px;
+            }
+            .fw-bold{
+                font-weight:bold;
+            }
+            .text-right{
+                text-align: right
             }
         </style>
     </head>
@@ -95,15 +99,15 @@
                                 <ul class="ul-invoice">
                                     <li class="fw-bold">Invoice To:</li>
                                     <li class="fw-bold" style="margin-top: 10px">{{ $invoice->customer_name }}</li>
-                                    <li>{{ $invoice->customer_address }}</li>
+                                    <li class="customer-addres">{{ $invoice->customer_address }}</li>
                                 </ul>
                             </td>
-                            <td style="text-align: right">
+                            <td class="text-right">
                                 <ul class="ul-invoice">
                                     <li class="fw-bold">Invoiced Date:</li>
-                                    <li style="margin-bottom:10px" >{{ $invoice->invoice_date->format('d/m/Y') }}</li>
+                                    <li style="margin-bottom:10px" >{{ $invoice->invoice_date->format('d F Y') }}</li>
                                     <li class="fw-bold">Due Date:</li>
-                                    <li>{{ $invoice->due_date->format('d/m/Y') }}</li>
+                                    <li>{{ $invoice->due_date->format('d F Y') }}</li>
                                 </ul>
                             </td>
                         </tr>
@@ -126,25 +130,25 @@
                         <tr>
                             <td>{{ $item->item }}</td>
                             <td>{{ $item->qty }}</td>
-                            <td>{{ number_format($item->price) }}</td>
-                            <td>{{ number_format($item->subtotal) }}</td>
+                            <td class="text-center">{{ number_format($item->price) }}</td>
+                            <td class="text-right fw-bold ">{{ number_format($item->subtotal) }}</td>
                         </tr>
                         @endforeach
                         <tr>
                             <td colspan="3">VAT 10%</td>
                            @if($invoice->vat == 0)
-                           <td class="fw-bold">-</td>
+                           <td class="fw-bold text-right">-</td>
                             @else
-                            <td class="fw-bold">{{$invoice->vat}}</td>
+                            <td class="fw-bold text-right">{{$invoice->vat}}</td>
                             @endif
                         </tr>
                         <tr>
                             <td colspan="3">Grand Total</td>
-                            <td class="fw-bold">{{ "Rp " . number_format($invoice->paymentDetails->total)}}</td>
+                            <td class="text-right">{{number_format($invoice->paymentDetails->total)}}</td>
                         </tr>
                         <tr>
                             <td colspan="3">Total:</td>
-                            <td class="fw-bold">{{ "Rp " . number_format($invoice->paymentDetails->total)}}</td>
+                            <td class="fw-bold text-right">{{ "Rp " . number_format($invoice->paymentDetails->total)}}</td>
                         </tr>
                       
                     </tbody>
@@ -163,7 +167,7 @@
                         <tr>
                             <td>{{ $invoice->paymentDetails->bank}}<br>{{ $invoice->paymentDetails->cabang}}</td>
                             <td>{{ $invoice->paymentDetails->no_rek}}<br> a/n {{ $invoice->paymentDetails->owner_rek}}</td>
-                            <td>{{ "Rp " . number_format($invoice->paymentDetails->total)}}</td>
+                            <td class="fw-bold">{{ "Rp " . number_format($invoice->paymentDetails->total)}}</td>
                         </tr>
                     </tbody>
                 </table>

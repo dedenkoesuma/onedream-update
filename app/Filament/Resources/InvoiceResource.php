@@ -34,7 +34,7 @@ class InvoiceResource extends Resource
                          ->required(),
                      Forms\Components\DatePicker::make('due_date')
                          ->label('Due Date')
-                         ->required(),
+                         ->nullable(),
                  ])->collapsible()->collapsed(),
              
              // Invoice Items Section
