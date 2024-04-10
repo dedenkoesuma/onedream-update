@@ -5,17 +5,21 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Models\Invoice;
 use Filament\Forms;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
 use Filament\Tables\Table;
 
 class InvoiceResource extends Resource
 {
     protected static ?string $model = Invoice::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-arrow-down';
+    protected static ?string $navigationGroup = 'Finance Managment';
+    protected static ?int $navigationSort = 5;
 
     public static function form(Form $form): Form
     {
@@ -29,12 +33,21 @@ class InvoiceResource extends Resource
                      Forms\Components\Textarea::make('customer_address')
                          ->label('Customer Address')
                          ->required(),
+                    Forms\Components\Select::make('invoice_type')
+                         ->options([
+                             'masuk' => 'Invoice Masuk',
+                             'keluar' => 'Invoice Keluar',
+                         ])
+                         ->label('Invoice Type')
+                         ->required()
+                         ->reactive(),
                      Forms\Components\DatePicker::make('invoice_date')
                          ->label('Invoice Date')
                          ->required(),
                      Forms\Components\DatePicker::make('due_date')
                          ->label('Due Date')
-                         ->nullable(),
+                         ->hidden(fn ($get) => $get('invoice_type') !== 'masuk')
+                         ->required(),
                  ])->collapsible()->collapsed(),
              
              // Invoice Items Section
@@ -94,6 +107,9 @@ class InvoiceResource extends Resource
                 ->searchable(),
                 TextColumn::make('items.item')
                 ->label('Nama Item')
+                ->searchable(),
+                TextColumn::make('invoice_type')
+                ->label('Jenis Invoice')
                 ->sortable()
                 ->searchable(),
                 TextColumn::make('paymentDetails.total')
@@ -103,7 +119,10 @@ class InvoiceResource extends Resource
                 ->searchable(),
             ])
             ->filters([
-                //
+                Filter::make('Invoice Masuk')
+                ->query(fn (Builder $query) => $query->where('invoice_type', 'masuk')),
+                Filter::make('Invoice Keluar')
+                ->query(fn (Builder $query) => $query->where('invoice_type', 'keluar')),
             ])
             ->actions([
                 Tables\Actions\EditAction::make()->color('black'),
@@ -122,13 +141,6 @@ class InvoiceResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
     public static function getPages(): array
     {
         return [
@@ -136,5 +148,9 @@ class InvoiceResource extends Resource
             'create' => Pages\CreateInvoice::route('/create'),
             'edit' => Pages\EditInvoice::route('/{record}/edit'),
         ];
+    }
+    public static function getPluralLabel(): string
+    {
+        return 'Invoice';
     }
 }

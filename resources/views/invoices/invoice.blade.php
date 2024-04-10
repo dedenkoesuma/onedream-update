@@ -97,17 +97,20 @@
                         <tr>
                             <td class="text-start">
                                 <ul class="ul-invoice">
-                                    <li class="fw-bold">Invoice To:</li>
+                                    <li class="fw-bold">Invoice To</li>
                                     <li class="fw-bold" style="margin-top: 10px">{{ $invoice->customer_name }}</li>
                                     <li class="customer-addres">{{ $invoice->customer_address }}</li>
                                 </ul>
                             </td>
                             <td class="text-right">
                                 <ul class="ul-invoice">
-                                    <li class="fw-bold">Invoiced Date:</li>
+                                    <li class="fw-bold">Invoiced Date</li>
+
                                     <li style="margin-bottom:10px" >{{ $invoice->invoice_date->format('d F Y') }}</li>
-                                    <li class="fw-bold">Due Date:</li>
+                                @if ($invoice->due_date !== null)
+                                    <li class="fw-bold">Due Date</li>
                                     <li>{{ $invoice->due_date->format('d F Y') }}</li>
+                                @endif
                                 </ul>
                             </td>
                         </tr>

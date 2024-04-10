@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('invoice_number');
             $table->string('customer_name');
             $table->text('customer_address');
+            $table->string('invoice_type');
             $table->string('invoice_date');
             $table->string('due_date')->nullable();
             $table->boolean('apply_vat');

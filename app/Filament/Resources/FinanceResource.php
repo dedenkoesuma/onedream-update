@@ -20,6 +20,7 @@ class FinanceResource extends Resource
     protected static ?string $model = Finance::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
+    protected static ?string $navigationGroup = 'Finance Managment';
     protected static ?int $navigationSort = 4;
 
     public static function form(Form $form): Form

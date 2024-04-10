@@ -22,6 +22,7 @@ class CustomersResource extends Resource
     protected static ?string $model = Customers::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+    protected static ?string $navigationGroup = 'Business Operations';
     protected static ?int $navigationSort = 3;
 
     public static function form(Form $form): Form
@@ -49,7 +50,8 @@ class CustomersResource extends Resource
                     ->label('Link Project')
                     ->required()
                     ->minLength(3)
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->prefix('https://'),
                 Textarea::make('testimoni')
                     ->label('Testimoni Pelanggan')
                     ->required(),
